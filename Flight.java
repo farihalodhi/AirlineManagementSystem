@@ -11,11 +11,11 @@ public class Flight {
     protected LocalDate arrivalTime;
     protected List<Seat> seats;
     protected String status; //On time, delayed, cancelled
-    //protected Pilot assignedPilot;
-    //protected List<AirHostess> assignedHostess;
+    protected Pilot assignedPilot;
+    protected List<AirHostess> assignedHostess;
     private Weather weatherForecast;
 
-    public Flight(String flightNumber, String sourceAirport, String destinationAirport, LocalTime departureTime, LocalDate arrivalTime, List<Seat> seats, String status, Weather weatherForecast) {
+   public Flight(String flightNumber, String sourceAirport, String destinationAirport, LocalTime departureTime, LocalDate arrivalTime, List<Seat> seats, String status,Pilot assignedPilot, List<AirHostess> assignedHostess, Weather weatherForecast) {
         this.flightNumber = flightNumber;
         this.sourceAirport = sourceAirport;
         this.destinationAirport = destinationAirport;
@@ -23,9 +23,10 @@ public class Flight {
         this.arrivalTime = arrivalTime;
         this.seats = seats;
         this.status = status;
+        this.assignedPilot = assignedPilot;
+        this.assignedHostess = assignedHostess;
         this.weatherForecast = weatherForecast;
     }
-
     public String getFlightNumber() {
         return flightNumber;
     }
@@ -84,6 +85,14 @@ public class Flight {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+      public List<AirHostess> getAssignedHostess() {
+        return assignedHostess;
+    }
+
+    public void setAssignedHostess(List<AirHostess> assignedHostess) {
+        this.assignedHostess = assignedHostess;
     }
 
     public void setWeatherForecast(Weather weatherForecast) {
