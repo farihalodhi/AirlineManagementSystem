@@ -1,5 +1,5 @@
 public class Booking {
-    private static int counter = 300;
+    private static int counter = 100;
     private String bookingID;
     private Flight flight;
     private Passenger passenger;
