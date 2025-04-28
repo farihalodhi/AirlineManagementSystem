@@ -1,101 +1,103 @@
-package oop_project;
-
 import java.util.List;
-import java.time.LocalDate;
-import java.time.LocalTime;
+
 public class Flight {
-    protected String flightNumber;
-    protected String sourceAirport;
-    protected String destinationAirport;
-    protected LocalTime departureTime;
-    protected LocalDate arrivalTime;
-    protected List<Seat> seats;
-    protected String status; //On time, delayed, cancelled
-    protected Pilot assignedPilot;
-    protected List<AirHostess> assignedHostess;
-    private Weather weatherForecast;
+    private String FlightNumber;
+    private String DepartureCity;
+    private String ArrivalCity;
+    private String source;
+    private String destination;
+    private String DepartureTime;
+    private String ArrivalTime;
+    private int totalSeats;
+    private int availableSeats;
+    private Pilot assignedPilot;
+    private String FlightId;
 
-   public Flight(String flightNumber, String sourceAirport, String destinationAirport, LocalTime departureTime, LocalDate arrivalTime, List<Seat> seats, String status,Pilot assignedPilot, List<AirHostess> assignedHostess, Weather weatherForecast) {
-        this.flightNumber = flightNumber;
-        this.sourceAirport = sourceAirport;
-        this.destinationAirport = destinationAirport;
-        this.departureTime = departureTime;
-        this.arrivalTime = arrivalTime;
-        this.seats = seats;
-        this.status = status;
-        this.assignedPilot = assignedPilot;
-        this.assignedHostess = assignedHostess;
-        this.weatherForecast = weatherForecast;
+    public Flight(String flightNumber, String departureCity, String arrivalCity, String departureTime, String arrivalTime, int totalSeats, int availableSeats, Pilot assignedPilot) {
+        FlightNumber = flightNumber;
+        DepartureCity = departureCity;
+        ArrivalCity = arrivalCity;
+        DepartureTime = departureTime;
+        ArrivalTime = arrivalTime;
+        this.totalSeats = totalSeats;
+        this.availableSeats = totalSeats;
     }
+
+    public String getFlightId() {
+        return FlightId;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
     public String getFlightNumber() {
-        return flightNumber;
+        return FlightNumber;
+    }
+    public String getDepartureCity() {
+        return DepartureCity;
+    }
+    public String getArrivalCity() {
+        return ArrivalCity;
+    }
+    public String getDepartureTime() {
+        return DepartureTime;
+    }
+    public String getArrivalTime() {
+        return ArrivalTime;
+    }
+    public int getTotalSeats() {
+        return totalSeats;
+    }
+    public int getAvailableSeats() {
+        return availableSeats;
+    }
+    public Pilot getAssignedPilot(Pilot pilot){
+        return assignedPilot;
+    }
+    public void assignPilot(Pilot pilot){
+
+        this.assignedPilot = pilot;
     }
 
-    public String getSourceAirport() {
-        return sourceAirport;
+    public void bookSeat(){
+        if(availableSeats > 0){
+            availableSeats--;
+            System.out.println("seat  is booked");
+        }
+        else{
+            System.out.println("no seats available");
+        }
+    }
+    public void cancelSeat(){
+        if(availableSeats < totalSeats){
+            availableSeats++;
+        }
+    }
+    public void setAvailableSeats(int availableSeats){
+        this.availableSeats = availableSeats;
     }
 
-    public String getDestinationAirport() {
-        return destinationAirport;
+    public void AssignPilot(Pilot pilot){
+        this.assignedPilot = pilot;
     }
 
-    public LocalTime getDepartureTime() {
-        return departureTime;
-    }
 
-    public LocalDate getArrivalTime() {
-        return arrivalTime;
-    }
-
-    public List<Seat> getSeats() {
-        return seats;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public Weather getWeatherForecast() {
-        return weatherForecast;
-    }
-
-    public void setFlightNumber(String flightNumber) {
-        this.flightNumber = flightNumber;
-    }
-
-    public void setSourceAirport(String sourceAirport) {
-        this.sourceAirport = sourceAirport;
-    }
-
-    public void setDestinationAirport(String destinationAirport) {
-        this.destinationAirport = destinationAirport;
-    }
-
-    public void setDepartureTime(LocalTime departureTime) {
-        this.departureTime = departureTime;
-    }
-
-    public void setArrivalTime(LocalDate arrivalTime) {
-        this.arrivalTime = arrivalTime;
-    }
-
-    public void setSeats(List<Seat> seats) {
-        this.seats = seats;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-      public List<AirHostess> getAssignedHostess() {
-        return assignedHostess;
-    }
-
-    public void setAssignedHostess(List<AirHostess> assignedHostess) {
-        this.assignedHostess = assignedHostess;
-    }
-
-    public void setWeatherForecast(Weather weatherForecast) {
-        this.weatherForecast = weatherForecast;
+    @Override
+    public String toString() {
+        return "Flight{" +
+                "FlightNumber='" + FlightNumber + '\'' +
+                ", DepartureCity='" + DepartureCity + '\'' +
+                ", ArrivalCity='" + ArrivalCity + '\'' +
+                ", DepartureTime='" + DepartureTime + '\'' +
+                ", ArrivalTime='" + ArrivalTime + '\'' +
+                ", totalSeats=" + totalSeats +
+                ", availableSeats=" + availableSeats +
+                ", assignedPilot=" + assignedPilot +
+                '}';
     }
 }

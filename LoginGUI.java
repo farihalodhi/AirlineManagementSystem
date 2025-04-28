@@ -5,74 +5,125 @@ import java.awt.event.ActionListener;
 
 public class LoginGUI extends JFrame {
 
-
-    //Continue as a guest option
-
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
+    private JButton guestButton;
     private JLabel statusLabel;
+    private JComboBox<String> roleDropdown;
+    private FlightManager flightManager;
+    private JButton signupButton;
 
-    public LoginGUI() {
-        // Set up the frame
+    public LoginGUI(FlightManager manager) {
+        this.flightManager = manager;
+        LoginManager loginManager = new LoginManager();
+
         setTitle("Airline Management System - Login");
-        setSize(400, 250);
+        setSize(400, 350);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center the window
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Create a panel for the form
-        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(30, 50, 10, 50));
 
-        // Username
         panel.add(new JLabel("Username:"));
         usernameField = new JTextField();
         panel.add(usernameField);
 
-        // Password
         panel.add(new JLabel("Password:"));
         passwordField = new JPasswordField();
         panel.add(passwordField);
 
-        // Login button
+        panel.add(new JLabel("Select Role:"));
+        roleDropdown = new JComboBox<>(new String[]{"Pilot", "AirHostess", "Admin"});
+        panel.add(roleDropdown);
+
         loginButton = new JButton("Login");
         panel.add(loginButton);
 
-        // Status label
+        signupButton = new JButton("Sign Up");
+        panel.add(signupButton);
+
+        guestButton = new JButton("Continue as Guest");
+        panel.add(guestButton);
+
         statusLabel = new JLabel("");
         panel.add(statusLabel);
 
         add(panel, BorderLayout.CENTER);
 
-        // Add action listener for login button
         loginButton.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
-                handleLogin();
+                String username = usernameField.getText().trim();
+                String password = new String(passwordField.getPassword()).trim();
+                String selectedRole = (String) roleDropdown.getSelectedItem();
+
+                User user = loginManager.Login(username, password);
+
+                if (user == null) {
+                    JOptionPane.showMessageDialog(LoginGUI.this, "Invalid credentials or user doesn't exist");
+                    return;
+                }
+
+                switch (selectedRole) {
+                    case "Pilot":
+                        if (user instanceof Pilot) {
+                            new PilotDashboard(((Pilot) user).getUsername(),flightManager).setVisible(true);
+                        } else {
+                            JOptionPane.showMessageDialog(LoginGUI.this, "Incorrect role selected for this user.");
+                            return;
+                        }
+                        break;
+                    case "AirHostess":
+                        if (user instanceof AirHostess) {
+                            new AirHostessDashboard(user.getUsername(),flightManager).setVisible(true);
+                        } else {
+                            JOptionPane.showMessageDialog(LoginGUI.this, "Incorrect role selected for this user.");
+                            return;
+                        }
+                        break;
+                    case "Admin":
+                        if (user instanceof Admin) {
+                            new AdminDashboard(user.getUsername(),flightManager).setVisible(true);
+                        } else {
+                            JOptionPane.showMessageDialog(LoginGUI.this, "Incorrect role selected for this user.");
+                            return;
+                        }
+                        break;
+                }
+
+                dispose();
             }
         });
 
-        setVisible(true);
-    }
+        guestButton.addActionListener(e -> {
+            JOptionPane.showMessageDialog(LoginGUI.this, "Welcome Guest!");
+            new GuestView(flightManager).setVisible(true);
+            dispose();
+        });
+        signupButton.addActionListener(e -> {
+            String username = usernameField.getText().trim();
+            String password = new String(passwordField.getPassword()).trim();
+            String selectedRole = (String) roleDropdown.getSelectedItem();
 
-    private void handleLogin() {
-        String username = usernameField.getText();
-        String password = new String(passwordField.getPassword());
+            if (username.isEmpty() || password.isEmpty() || selectedRole.isEmpty()) {
+                JOptionPane.showMessageDialog(LoginGUI.this, "Please fill all fields.");
+                return;
+            }
 
-        // Dummy authentication logic
-        if (username.equals("admin") && password.equals("password")) {
-            statusLabel.setText("Login successful!");
-            JOptionPane.showMessageDialog(this, "Welcome, " + username + "!");
-            // Proceed to dashboard or next window here
-        } else {
-            statusLabel.setText("Invalid credentials.");
-            JOptionPane.showMessageDialog(this, "Incorrect username or password.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+            if (!selectedRole.equalsIgnoreCase("Pilot") &&
+                    !selectedRole.equalsIgnoreCase("AirHostess") &&
+                    !selectedRole.equalsIgnoreCase("Admin")) {
+                JOptionPane.showMessageDialog(LoginGUI.this, "Invalid role. Only Pilot, AirHostess, or Admin can signup.");
+                return;
+            }
 
-    // Main method to run the application
-    public static void main(String[] args) {
-        new LoginGUI();
+            if (loginManager.Signup(username, password, selectedRole)) {
+                JOptionPane.showMessageDialog(LoginGUI.this, "Signup successful! You can now login.");
+            } else {
+                JOptionPane.showMessageDialog(LoginGUI.this, "Signup failed. Username might already exist.");
+            }
+        });
     }
 }
