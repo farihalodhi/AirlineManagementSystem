@@ -1,8 +1,0 @@
-fariha ,abc123
-ahmed ,ahmed123, Pilot
-ali ,abcd123, AirHostess
-alishba ,030027, AirHostess
-Faizan ,superman, Pilot
-hira ,teaqueen, AirHostess
-hamza ,admin1234, Pilot
-ahmed ,batman, Admin
